@@ -1,0 +1,37 @@
+def sigmoid(z):
+    """Sigmoid activation: σ(z) = 1 / (1 + e^{-z})
+    Clipping prevents overflow for large |z|.
+    """
+    return 1 / (1 + np.exp(-np.clip(z, -500, 500)))
+
+def sigmoid_derivative(a):
+    """Derivative of sigmoid in terms of activation a:
+    σ'(z) = σ(z)(1 - σ(z)) = a(1 - a)
+    (Derived in Task 3 — expressed as a function of a, not z)
+    """
+    return a * (1 - a)
+
+# ── Step 2: Forward Pass ───────────────────────────────
+def forward_pass(X, W1, b1, W2, b2, W3, b3):
+    """Compute activations for all three layers.
+    X  : (m, 784)  — input batch
+    W1 : (784,128), b1: (128,)
+    W2 : (128, 64), b2: ( 64,)
+    W3 : ( 64, 10), b3: ( 10,)
+    Returns all intermediate values needed for backprop.
+    """
+    # Layer 1: hidden layer 1
+    Z1 = X @ W1 + b1          # (m, 128) — weighted sum
+    A1 = sigmoid(Z1)           # (m, 128) — activation
+
+    # Layer 2: hidden layer 2
+    Z2 = A1 @ W2 + b2          # (m, 64)
+    A2 = sigmoid(Z2)            # (m, 64)
+
+    # Output layer
+    Z3 = A2 @ W3 + b3          # (m, 10)
+    A3 = sigmoid(Z3)            # (m, 10) — predictions ŷ
+
+    return Z1, A1, Z2, A2, Z3, A3
+
+print("Task 1 functions defined: sigmoid, sigmoid_derivative, forward_pass ✓")
